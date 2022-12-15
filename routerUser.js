@@ -27,6 +27,7 @@ router.post('/login', (req, res)=>{
                     accessToken: accessToken, 
                     'Message': 'Login Successfully',
                     'userId': e.id,
+                    'username': e.username,
                 })
             } else
                 return res.status(403).json({'Message': 'Wrong Password'})
