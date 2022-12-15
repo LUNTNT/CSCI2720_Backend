@@ -21,7 +21,11 @@ router.post('/login', (req, res)=>{
             console.log(password, e.password)
             if (ce) {
                 const accessToken = jwtAuth.createToken(e.username, e.userType)
-                return res.send({accessToken: accessToken, 'Message': 'Login Successfully'})
+                return res.send({
+                    accessToken: accessToken, 
+                    'Message': 'Login Successfully',
+                    'userId': e.id,
+                })
             } else
                 return res.status(403).json({'Message': 'Wrong Password'})
 
@@ -145,22 +149,31 @@ router.get('/:userId', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 
     let currentId = Math.floor(Math.random() * 1000);
-    schema.User.findOne({}, 'id').sort({id : -1}).exec(function(err, e) {
+    schema.User.findOne({}, 'id').sort({id : -1}).exec(async function(err, e) {
         if (e || !err) 
             currentId = e.id + 1;
 
-        schema.User.create({
-            ...req.body, 
-            id: currentId,
-        }, (eerr, ee) => {
-            if (eerr)
+        await bcrypt.hash(req.body['password'], 10, function(err, hash) {
+            if (err)
                 return res.status(500).send({'Message': eerr});
-            else
-                return res.status(201).send(ee);
+
+            req.body['password'] = hash;
+
+            schema.User.create({
+                ...req.body, 
+                id: currentId,
+            }, (eerr, ee) => {
+                if (eerr)
+                    return res.status(500).send({'Message': eerr});
+                else
+                    return res.status(201).send('');
+            });
         });
+
+
     })
 });
 
@@ -171,15 +184,24 @@ router.put('/:userId', async (req, res) => {
                 return res.status(500).send({'Message': eerr});
 
             req.body['password'] = hash;
+
+            schema.User.updateOne({id: req.params['userId']}, req.body, (eerr, ee) => {
+                if (eerr)
+                    return res.status(500).send({'Message': eerr});
+                else
+                    return res.status(200).send(ee);
+            });
+        });
+    } else {
+        schema.User.updateOne({id: req.params['userId']}, req.body, (eerr, ee) => {
+            if (eerr)
+                return res.status(500).send({'Message': eerr});
+            else
+                return res.status(200).send(ee);
         });
     }
 
-    schema.User.updateOne({id: req.params['userId']}, req.body, (eerr, ee) => {
-        if (eerr)
-            return res.status(500).send({'Message': eerr});
-        else
-            return res.status(200).send(ee);
-    });
+
 });
 
 router.delete('/:userId', (req, res) => {
