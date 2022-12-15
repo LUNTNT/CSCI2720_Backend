@@ -16,7 +16,25 @@ db.once('open', function () {
         return;
       }
   
-      data = JSON.parse(data)
+      data = JSON.parse(data);
+
+      // for (let i = 0; i < data.length; i++) {
+      //   data[i]['id'] = parseInt(data[i]['_id']);
+      //   delete data[i]['_id'];
+
+      //   if (!data[i]['latitude']) {
+      //     continue;
+      //   }
+
+      //   schema.Venue.create(data[i], (err, e) => {
+      //     if (err)
+      //       console.log(err)
+      //     else
+      //       console.log(e)
+      //   });
+      // }
+
+
   
       for (let i = 0; i < data.length; i++) {
   
@@ -30,7 +48,7 @@ db.once('open', function () {
             return
           } 
           schema.Event.create({
-              id : data[i]['_id'],
+              id : parseInt(data[i]['_id']),
               titlee: data[i]['titlee'] ? data[i]['titlee'] : '',
               predateE: data[i]['predateE' ? data[i]['predateE'] : ''],
               progtimee: data[i]['progtimee'] ? data[i]['progtimee'] : '',
@@ -52,12 +70,7 @@ db.once('open', function () {
         })
       }
   
-      // schema.Venue.insertMany(data, (err, e) => {
-      //   if (err)
-      //     console.log(err)
-      //   else
-      //     console.log(e)
-      // });
+
   
     });
   })

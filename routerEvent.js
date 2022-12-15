@@ -32,32 +32,35 @@ router.get('/:eventId', (req, res) => {
 
 router.post('/', (req, res) => {
 
-    let currentId = String(Range(0, 1000));
+    let currentId = Math.floor(Math.random() * 1000);
     schema.Event.findOne({}, 'id').sort({id : -1}).exec(function(err, e) {
-        if (err) return
-        currentId = String(parseInt(e[0].id) + 1);
+        if (e || !err) 
+            currentId = e.id + 1;
+        console.log(e);
+
+        schema.Venue.findOne({id : req.body['venueid']}, function(err, e) {
+
+            if (err) return res.status(500).send({'Message': err});
+            if (!e) return res.status(406).send({'Message': 'Venue Id Not Found'})
+    
+            req.body['venueid'] = e._id;
+    
+            schema.Event.create({
+                ...req.body, 
+                id: currentId,
+            }, (eerr, ee) => {
+                if (eerr)
+                    return res.status(500).send({'Message': eerr});
+                else
+                    return res.status(201).send(ee);
+            });
+        });
     })
 
-    schema.Venue.findOne({id : req.body['venueid']}, function(err, e) {
 
-        if (err) return res.status(500).send({'Message': err});
-        if (!e) return res.status(406).send({'Message': 'Venue Id Not Found'})
-
-        req.body['venueid'] = e._id;
-
-        schema.Event.create({
-            ...req.body, 
-            id: currentId,
-        }, (eerr, ee) => {
-            if (eerr)
-                return res.status(500).send({'Message': eerr});
-            else
-                return res.status(201).send(ee);
-        });
-    });
 });
 
-router.put('/:eventId', (req, res) => {
+router.put('/:eventId', async (req, res) => {
     if (req.body['venueid']) {
         schema.Venue.findOne({id : req.body['venueid']}, function(err, e) {
 
@@ -65,15 +68,24 @@ router.put('/:eventId', (req, res) => {
             if (!e) return res.status(406).send({'Message': 'Venue Id Not Found'});
     
             req.body['venueid'] = e._id;
+
+            schema.Event.updateOne({ id: req.params['eventId']}, req.body, (eerr, ee) => {
+                if (eerr)
+                    return res.status(500).send({'Message': eerr});
+                else
+                    return res.status(200).send(ee);
+            });
+        });
+    } else {
+        schema.Event.updateOne({ id: req.params['eventId']}, req.body, (eerr, ee) => {
+            if (eerr)
+                return res.status(500).send({'Message': eerr});
+            else
+                return res.status(200).send(ee);
         });
     }
 
-    schema.Event.updateOne({ id: req.params['eventId']}, req.body, (eerr, ee) => {
-        if (eerr)
-            return res.status(500).send({'Message': eerr});
-        else
-            return res.status(200).send(ee);
-    });
+
 });
 
 router.delete('/:eventId', (req, res) => {

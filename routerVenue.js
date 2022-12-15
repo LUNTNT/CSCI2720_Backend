@@ -31,20 +31,48 @@ router.get('/:venueId', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    res.send('CSCI2720 Project Group 30 RESTful API Server');
+    let currentId = Math.floor(Math.random() * 1000);
+    schema.Venue.findOne({}, 'id').sort({id : -1}).exec(function(err, e) {
+        if (e || !err) 
+            currentId = e.id + 1;
+
+        schema.Venue.create({
+            ...req.body, 
+            id: currentId,
+        }, (eerr, ee) => {
+            if (eerr)
+                return res.status(500).send({'Message': eerr});
+            else
+                return res.status(201).send(ee);
+        });
+    });
+
 });
 
 router.put('/:venueId', (req, res) => {
-    res.send('CSCI2720 Project Group 30 RESTful API Server');
+    schema.Venue.updateOne({ id: req.params['venueId']}, req.body, (eerr, ee) => {
+        if (eerr)
+            return res.status(500).send({'Message': eerr});
+        else
+            return res.status(200).send(ee);
+    });
 });
 
 router.delete('/:venueId', (req, res) => {
-    res.send('CSCI2720 Project Group 30 RESTful API Server');
+    schema.Venue.findOneAndDelete({id: req.params['venueId']}, function(err, e) {
+        if (err)
+            return res.status(500).send({'Message': err});
+  
+        if (!e)
+            return res.status(404).send({'Message': 'Event Id Not Found'});
+  
+        return res.status(204).send('');
+    })
 });
 
 router.get('/search', (req, res) => {
 
-    schema.Venue.find({id : req.query['keyword']}, function(err, e) {
+    schema.Venue.find({venuee : req.query['keyword']}, function(err, e) {
 
         if (err) 
             return res.status(500).send({'Message': err});
