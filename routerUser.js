@@ -7,6 +7,8 @@ const schema = require('./schema');
 
 router.post('/login', (req, res)=>{
     const {username, password} = req.body
+    console.log(req.body)
+
 
     schema.User.findOne({username: username}, (err, e)=> {
         if (err) return res.status(500).json({'Message': err})
