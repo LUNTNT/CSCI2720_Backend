@@ -4,7 +4,7 @@ const router = express.Router();
 const schema = require('./schema');
 
 router.get('/', async (req, res) => {
-    schema.Venue
+    await schema.Venue
     .find({}, '-__v') 
     .exec(async function (err, e) {
         if (err) 
@@ -30,9 +30,11 @@ router.get('/', async (req, res) => {
                         ...(ee.find((eeitem) => e[i]._id.equals(eeitem._id))),
                     });
                 }
+
+                return res.send(mergeVenues);
         });
 
-        return res.send(mergeVenues);
+        
     });
 });
 
