@@ -19,10 +19,8 @@ const Event = mongoose.model('project_events', EventSchema);
 
 const VenueSchema = mongoose.Schema({
     id : {type: Number, required: true , unique: true},
-    venuec: { type: String},
     venuee: { type: String, required: true },
-    latitude: { type: String},
-    longitude: { type: String},
+    coordinate: { type:Object },
 });
 const Venue = mongoose.model('project_venues', VenueSchema);
 

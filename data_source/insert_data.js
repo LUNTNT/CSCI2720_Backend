@@ -19,14 +19,19 @@ db.once('open', function () {
       data = JSON.parse(data);
 
       // for (let i = 0; i < data.length; i++) {
-      //   data[i]['id'] = parseInt(data[i]['_id']);
-      //   delete data[i]['_id'];
 
       //   if (!data[i]['latitude']) {
       //     continue;
       //   }
 
-      //   schema.Venue.create(data[i], (err, e) => {
+      //   schema.Venue.create({
+      //     id: parseInt(data[i]['_id']),
+      //     venuee: data[i]['venuee'],
+      //     coordinate: {
+      //       lat: parseFloat(data[i]['latitude']),
+      //       lng: parseFloat(data[i]['longitude']),
+      //     },
+      //   }, (err, e) => {
       //     if (err)
       //       console.log(err)
       //     else
@@ -50,7 +55,7 @@ db.once('open', function () {
           schema.Event.create({
               id : parseInt(data[i]['_id']),
               titlee: data[i]['titlee'] ? data[i]['titlee'] : '',
-              predateE: data[i]['predateE' ? data[i]['predateE'] : ''],
+              predateE: data[i]['predateE'] ? data[i]['predateE'] : '',
               progtimee: data[i]['progtimee'] ? data[i]['progtimee'] : '',
               venueid: e._id,
               pricee: data[i]['pricee'] ? data[i]['pricee'] : '',

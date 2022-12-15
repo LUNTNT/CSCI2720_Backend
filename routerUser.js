@@ -145,9 +145,28 @@ router.get('/:userId', (req, res) => {
     });
 });
 
-router.put('/:userId', (req, res) => {
+router.post('/', (req, res) => {
+
+    let currentId = Math.floor(Math.random() * 1000);
+    schema.User.findOne({}, 'id').sort({id : -1}).exec(function(err, e) {
+        if (e || !err) 
+            currentId = e.id + 1;
+
+        schema.User.create({
+            ...req.body, 
+            id: currentId,
+        }, (eerr, ee) => {
+            if (eerr)
+                return res.status(500).send({'Message': eerr});
+            else
+                return res.status(201).send(ee);
+        });
+    })
+});
+
+router.put('/:userId', async (req, res) => {
     if (req.body['password']) {
-        bcrypt.hash(req.body['password'], 10, function(err, hash) {
+        await bcrypt.hash(req.body['password'], 10, function(err, hash) {
             if (err)
                 return res.status(500).send({'Message': eerr});
 
@@ -160,6 +179,19 @@ router.put('/:userId', (req, res) => {
             return res.status(500).send({'Message': eerr});
         else
             return res.status(200).send(ee);
+    });
+});
+
+router.delete('/:userId', (req, res) => {
+
+    schema.User.findOneAndDelete({id: req.params['userId']}, req.body, (err, e) => {
+        if (err)
+            return res.status(500).send({'Message': err});
+  
+        if (!e)
+            return res.status(404).send({'Message': 'Event Id Not Found'});
+  
+        return res.status(204).send('');
     });
 });
 
