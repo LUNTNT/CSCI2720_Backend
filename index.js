@@ -32,5 +32,5 @@ app.all('/*', (req, res) => {
   res.send('CSCI2720 Project Group 30 RESTful API Server');
 });
 
-// listen to port 3000
-const server = app.listen(3000);
+// listen to port 13000
+const server = app.listen(13000);
