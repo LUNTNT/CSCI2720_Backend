@@ -8,10 +8,10 @@ router.get('/', (req, res) => {
     .find({}, '-_id -__v') 
     .exec(function (err, e) {
         if (err) 
-            return res.status(500).send({'Error': err});
+            return res.status(500).send({'Message': err});
 
         if (!e) 
-            return res.status(404).send({'Error': 'No Event Found'});
+            return res.status(404).send({'Message': 'No Event Found'});
 
         return res.send(e)
     });
@@ -22,9 +22,9 @@ router.get('/:venueId', (req, res) => {
     .findOne({ id: req.params['venueId']}, '-_id  -__v')
     .exec(function (err, e) {
         if (err) 
-            return res.status(500).send({'Error': err});
+            return res.status(500).send({'Message': err});
         if (!e) 
-            return res.status(404).send({'Error': 'Venue Id Not Found'});
+            return res.status(404).send({'Message': 'Venue Id Not Found'});
         
         return res.send(e)
     });
@@ -47,9 +47,9 @@ router.get('/search', (req, res) => {
     schema.Venue.find({id : req.query['keyword']}, function(err, e) {
 
         if (err) 
-            return res.status(500).send({'Error': err});
+            return res.status(500).send({'Message': err});
         if (!e) 
-            return res.status(404).send({'Error': 'Keyword Not Found'});
+            return res.status(404).send({'Message': 'Keyword Not Found'});
 
         return res.send(ee)
     });

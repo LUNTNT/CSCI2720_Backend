@@ -1,0 +1,23 @@
+[
+    {
+        "id" : "0",
+        "username": "admin",
+        "password": "admin",
+        "userType": "admin",
+        "favouriteVenues": []
+    },
+    {
+        "id" : "1",
+        "username": "user",
+        "password": "user",
+        "userType": "user",
+        "favouriteVenues": []
+    },
+    {
+        "id" : "2",
+        "username": "albert",
+        "password": "albert",
+        "userType": "user",
+        "favouriteVenues": []
+    }
+]

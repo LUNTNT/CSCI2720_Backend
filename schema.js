@@ -27,6 +27,7 @@ const VenueSchema = mongoose.Schema({
 const Venue = mongoose.model('project_venues', VenueSchema);
 
 const UserSchema = mongoose.Schema({
+    id : {type: String, required: true , unique: true},
     username: {type: String, required: true , unique: true},
     password: { type: String, required: true },
     userType: { type: String, required: true },
@@ -35,9 +36,10 @@ const UserSchema = mongoose.Schema({
 const User = mongoose.model('project_users', UserSchema);
 
 const CommentSchema = mongoose.Schema({
+    id: {type: String, required: true , unique: true},
     content : {type: String, required: true , unique: true},
-    user: {type: [mongoose.Schema.Types.ObjectId], ref: 'project_users'},
-    venue: {type: [mongoose.Schema.Types.ObjectId], ref: 'project_venues'},
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'project_users'},
+    venue: {type: mongoose.Schema.Types.ObjectId, ref: 'project_venues'},
 });
 const Comment = mongoose.model('project_comments', CommentSchema);
 
