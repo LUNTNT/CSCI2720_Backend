@@ -1,3 +1,7 @@
+# CSCI2720_Backend
+
+## node index.js
+
 GET     /user                               get all user include name & pw
 GET     /user/:userid                       get user info
 PUT     /user/:userid                       update a user
