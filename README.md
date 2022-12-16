@@ -1,7 +1,7 @@
 # CSCI2720_Backend
 
 ## node index.js
-
+```
 GET     /user                               get all user include name & pw
 GET     /user/:userid                       get user info
 PUT     /user/:userid                       update a user
@@ -32,3 +32,4 @@ GET     /venue/search?keyword={}            get venues by searching
 POST    /venue                              add new venue
 PUT     /venue/venueId                      update a venue
 DELETE  /venue/venueId                      delete a venue
+```
